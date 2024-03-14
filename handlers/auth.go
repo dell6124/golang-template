@@ -7,8 +7,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	guuid "github.com/google/uuid"
 	"go.mod/database"
+	"go.mod/helper"
 	"go.mod/model"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -60,7 +60,7 @@ func Login(c *fiber.Ctx) error {
 			"message": "User not found",
 		})
 	}
-	if !comparePasswords(found.Password, []byte(json.Password)) {
+	if !helper.ComparePasswords(found.Password, []byte(json.Password)) {
 		return c.JSON(fiber.Map{
 			"code":    401,
 			"message": "Invalid Password",

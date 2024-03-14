@@ -174,13 +174,14 @@ func DeleteUser(c *fiber.Ctx) error {
 			"message": "No user found with given username.",
 		})
 	}
+
 	if !helper.ComparePasswords(user.Password, []byte(json.Password)) {
 		return c.Status(400).JSON(fiber.Map{
 			"message": "Invalid Password",
 		})
 	}
 
-	db.Delete(&user)
+	db.Where("email = ?", &json.Email).Delete(user) // will delete all emails of jinz
 	db.Model(&user).Association("Sessions").Delete()
 	db.Model(&user).Association("Products").Delete()
 	c.ClearCookie("sessionid")
